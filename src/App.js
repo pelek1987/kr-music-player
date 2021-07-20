@@ -7,20 +7,37 @@ function Heading() {
 }
 
 function SongPlayer() {
+    const audioUrl = 'https://examples.devmastery.pl/assets/audio/deadfro5h.mp3';
+    const showControls = false || true;
     return(
         <section>
             <Heading />
-            <audio controls>
-                <source src={'https://examples.devmastery.pl/assets/audio/deadfro5h.mp3'} />
+            <audio controls={showControls}>
+                <source src={audioUrl} />
             </audio>
         </section>
     )
 }
 
+function getStatusMessage(isLoading, hasError) {
+    let msg = null;
+    if(isLoading) {
+        msg = 'Loading...';
+    }
+    if(hasError) {
+        msg = 'Error occured...';
+    }
+    return msg;
+}
+
 function App() {
+    const hasError = false;
+    const isLoading = false;
+    const statusMessage = getStatusMessage(isLoading, hasError);
+    const showPlayer = !hasError && !isLoading;
   return (
     <div className="App">
-        <SongPlayer />
+        { showPlayer ? <SongPlayer/> : statusMessage }
     </div>
   );
 }
