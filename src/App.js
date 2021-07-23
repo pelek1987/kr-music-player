@@ -19,19 +19,11 @@ function SongPlayer({showControls = true, song}) {
     )
 }
 
-function SongListItem({title, artist}) {
-    return <li>{title} by {artist}</li>
-}
-
-function SongList({ songs }) {
-    return (
-        <section>
-            <Heading title={'Songs'} />
-            <ul>
-                {songs.map(({artist, title, audioUrl}) => <SongListItem key={audioUrl} title={title} artist={artist} />)}
-            </ul>
-        </section>
-    )
+function SongListItem({title, artist, isCurrent}) {
+    const style = {
+    backgroundColor: isCurrent ? 'darkslategrey' : 'none'
+    }
+    return <li style={style}>{title} by {artist}</li>
 }
 
 function App() {
@@ -62,7 +54,18 @@ function App() {
                 showControls
                 song={currentSong}
             />
-            <SongList songs={songs} />
+            <section>
+                <Heading title={'Songs'} />
+                <ul>
+                    {songs.map(({artist, title, audioUrl}) => <SongListItem
+                        key={audioUrl}
+                        title={title}
+                        artist={artist}
+                        isCurrent={currentSong.audioUrl === audioUrl}
+                    />)}
+                </ul>
+            </section>
+
         </div>
     );
 }
