@@ -1,4 +1,5 @@
 import './styles.css';
+import {useState} from "react";
 
 function Heading({title}) {
     return (
@@ -21,7 +22,7 @@ function SongPlayer({showControls = true, song}) {
 
 function SongListItem({song: {title, artist, audioUrl, coverUrl}, isCurrent, onSelect}) {
     const style = {
-    backgroundColor: isCurrent ? 'darkslategrey' : 'none'
+    background: isCurrent ? 'darkslategrey' : 'none'
     }
     const handleClick = () => onSelect({title, artist, audioUrl, coverUrl});
     return <li onClick={handleClick} style={style}>{title} by {artist}</li>
@@ -48,8 +49,14 @@ function App() {
             artist: "Wowa"
         }
     ];
-    const currentSong = songs[0]
-    const handleSelectedSong = (selectedSong) => console.log(selectedSong)
+    const [currentSongIndex, setCurrentSongIndex] = useState(0)
+    const currentSong = songs[currentSongIndex];
+    const handleSelectedSong = (selectedSong) => {
+        const audioIndex = songs.findIndex(song => song.audioUrl === selectedSong.audioUrl)
+        if(audioIndex >= 0) {
+            setCurrentSongIndex(audioIndex);
+        }
+    }
     return (
         <div className="App">
             <SongPlayer
