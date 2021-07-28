@@ -1,5 +1,5 @@
 import './styles.css';
-import {useState} from "react";
+import {useRef, useState} from "react";
 
 function Heading({title}) {
     return (
@@ -9,13 +9,18 @@ function Heading({title}) {
 
 function SongPlayer({showControls = true, song}) {
     const { audioUrl, coverUrl } = song;
+    const audioRef = useRef();
     return (
         <section>
             <Heading title={'Music Player'}/>
             <img src={coverUrl} width={250} height={250} alt='Song cover'/>
-            <audio key={audioUrl}  controls={showControls}>
+            <audio key={audioUrl} ref={audioRef}  controls={showControls}>
                 <source src={audioUrl}/>
             </audio>
+            <div>
+                <button onClick={() => audioRef.current.play()}>Play</button>
+                <button onClick={() => audioRef.current.pause()}>Pause</button>
+            </div>
         </section>
     )
 }
