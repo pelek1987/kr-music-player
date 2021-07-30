@@ -25,6 +25,14 @@ function SongPlayer({showControls = true, song}) {
     )
 }
 
+function Songs({ children }) {
+    return (
+        <section className='Songs'>
+            {children}
+        </section>
+    )
+}
+
 function SongListItem({song: {title, artist, audioUrl, coverUrl}, isCurrent, onSelect}) {
 
     const handleClick = () => onSelect({title, artist, audioUrl, coverUrl});
@@ -63,7 +71,7 @@ function App() {
                         showControls={false}
                         song={currentSong}
                     />
-                    <section className='Songs'>
+                    <Songs>
                         <Heading title={'Songs'} />
                         <ul>
                             {songs.map((song) => <SongListItem
@@ -72,7 +80,7 @@ function App() {
                                 onSelect={handleSelectedSong}
                             />)}
                         </ul>
-                    </section>
+                    </Songs>
                 </>
             )}
         </div>
