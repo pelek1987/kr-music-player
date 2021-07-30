@@ -1,5 +1,5 @@
 import './styles.css';
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 
 function Heading({title}) {
     return (
@@ -34,26 +34,19 @@ function SongListItem({song: {title, artist, audioUrl, coverUrl}, isCurrent, onS
 }
 
 function App() {
-    const songs = [
-        {
-            audioUrl: "https://examples.devmastery.pl/assets/audio/deadfro5h.mp3",
-            coverUrl: "https://examples.devmastery.pl/assets/audio/deadfro5h.jpg",
-            title: "Deadfro5h",
-            artist: "starfrosh"
-        },
-        {
-            audioUrl: "https://examples.devmastery.pl/assets/audio/majesty.mp3",
-            coverUrl: "https://examples.devmastery.pl/assets/audio/majesty.jpg",
-            title: "Majesty (Original Mix)",
-            artist: "Ryan Craig Martin"
-        },
-        {
-            audioUrl: "https://examples.devmastery.pl/assets/audio/runs.mp3",
-            coverUrl: "https://examples.devmastery.pl/assets/audio/runs.jpg",
-            title: "Runs",
-            artist: "Wowa"
-        }
-    ];
+    const URL = 'https://examples.devmastery.pl/songs-api/songs';
+    const [songs, setSongs] = useState([]);
+    useEffect(() => {
+        window.fetch(URL)
+            .then(res => {
+                if(res.ok) {
+                    return res.json()
+                }
+                throw new Error('Error: Could not fetch songs list.')
+            })
+            .then(data => setSongs(data))
+            .catch(err => console.log(err));
+    }, [])
     const [currentSongIndex, setCurrentSongIndex] = useState(0)
     const currentSong = songs[currentSongIndex];
     const handleSelectedSong = (selectedSong) => {
@@ -64,21 +57,24 @@ function App() {
     }
     return (
         <div className="App">
-            <SongPlayer
-                showControls
-                song={currentSong}
-            />
-            <section>
-                <Heading title={'Songs'} />
-                <ul>
-                    {songs.map((song) => <SongListItem
-                        song={song}
-                        isCurrent={currentSong.audioUrl === song.audioUrl}
-                        onSelect={handleSelectedSong}
-                    />)}
-                </ul>
-            </section>
-
+            {songs.length === 0 ? 'Loading...' : (
+                <>
+                    <SongPlayer
+                        showControls
+                        song={currentSong}
+                    />
+                    <section>
+                        <Heading title={'Songs'} />
+                        <ul>
+                            {songs.map((song) => <SongListItem
+                                song={song}
+                                isCurrent={currentSong.audioUrl === song.audioUrl}
+                                onSelect={handleSelectedSong}
+                            />)}
+                        </ul>
+                    </section>
+                </>
+            )}
         </div>
     );
 }
