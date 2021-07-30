@@ -25,6 +25,21 @@ function SongPlayer({showControls = true, song}) {
     )
 }
 
+function Songs({songs, currentSong, handleSelectedSong}) {
+    return (
+        <section className='Songs'>
+            <Heading title={'Songs'} />
+            <ul>
+                {songs.map((song) => <SongListItem
+                    song={song}
+                    isCurrent={currentSong.audioUrl === song.audioUrl}
+                    onSelect={handleSelectedSong}
+                />)}
+            </ul>
+        </section>
+    )
+}
+
 function SongListItem({song: {title, artist, audioUrl, coverUrl}, isCurrent, onSelect}) {
 
     const handleClick = () => onSelect({title, artist, audioUrl, coverUrl});
@@ -63,16 +78,7 @@ function App() {
                         showControls={false}
                         song={currentSong}
                     />
-                    <section className='Songs'>
-                        <Heading title={'Songs'} />
-                        <ul>
-                            {songs.map((song) => <SongListItem
-                                song={song}
-                                isCurrent={currentSong.audioUrl === song.audioUrl}
-                                onSelect={handleSelectedSong}
-                            />)}
-                        </ul>
-                    </section>
+                    <Songs songs={songs} currentSong={currentSong} handleSelectedSong={handleSelectedSong}/>
                 </>
             )}
         </div>
